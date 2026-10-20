@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { crearServicio, prueba,listarServicios,servicioBuscado, borrarServicio  } from "../controllers/servicios.controllers.js";
+import { crearServicio, prueba,listarServicios,servicioBuscado, borrarServicio, editarServicio  } from "../controllers/servicios.controllers.js";
 const router = Router();
 //http://localhost:3000/api/servicios/test
 //http://localhost:3000/api/servicios/
 //get, put,post, delete
 //router.route('/test').get(prueba)
 router.route('/').post(crearServicio).get(listarServicios)
-router.route('/:id').get(servicioBuscado).delete(borrarServicio)
+router.route('/:id').get(servicioBuscado).delete(borrarServicio).put(editarServicio)
 
 export default router;
