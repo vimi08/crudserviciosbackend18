@@ -1,3 +1,4 @@
+import e from "express";
 import Servicio from "../models/servicio.js";
 
 export const prueba = (req, res) => {
@@ -9,11 +10,60 @@ export const crearServicio = async (req, res) => {
   try {
     console.log(req.body);
     const servicioNuevo = new Servicio(req.body);
-    //guardar en labase de datos 
+    //guardar en labase de datos
     await servicioNuevo.save();
     res.status(201).json({ mensaje: "Servicio creado correctamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ mensaje: "Ocurrió un error al intentar crear el servicio" });
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrió un error al intentar crear el servicio" });
+  }
+};
+
+export const listarServicios = async (req, res) => {
+  try {
+    const servicios = await Servicio.find();
+    res.status(200).json(servicios);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrio un error al intentar listar lso servicios" });
+  }
+};
+
+export const servicioBuscado = async (req, res) => {
+  try {
+    // console.log(req.params.id)
+    const servicio = await Servicio.findById(req.params.id);
+    // si no encontre elservicio
+    if (!servicio) {
+      return res.status(404).json({ mensaje: "Servicio no encontrado" });
+    }
+    res.status(200).json(servicio);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrio un error al intentar buscar un servicio" });
+  }
+};
+
+export const borrarServicio = async (req, res) => {
+  try {
+    const servicioBorrado = await Servicio.findByIdAndDelete(req.params.id);
+    console.log(servicioBorrado);
+    if (!servicioBorrado) {
+      return res
+        .status(404)
+        .json({ mensaje: "no se encontro el servicio para borrar" });
+    }
+    res.status(200).json({ mensaje: "El servicio fue borrado correctamente" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrio un error al intentar borrar un servicio" });
   }
 };
